@@ -30,6 +30,8 @@ python punto1.py <number[1-3]> <path> <filename> [<tag> ...]
 
 ## Ejemplo
 
+si el archivo se encuentra en la misma ruta.
+
 ```sh
 python punto1.py 3 ./ sample-01-dicom.dcm 0x0008 0x0016
 ```
