@@ -61,8 +61,59 @@ Este script en Python demuestra cómo cargar y procesar información de estudios
 2. **Ejecutar el Script**: Proporciona la ruta a un archivo DICOM como argumento de línea de comandos al ejecutar el script.
 
    ```bash
-   python script.py ruta/al/archivo_dicom.dcm
+   python punto2.py ruta/al/archivo_dicom.dcm
 
    ```
 
 3. **Salida**: El script cargará el archivo DICOM, extraerá la información relevante y la imprimirá en la consola. La salida incluye la información del paciente y los detalles del estudio.
+
+# Punto 3 a
+
+# Hilos para Imprimir Números Pares e Impares
+
+Este script en Python utiliza hilos para imprimir números pares e impares entre 1 y 200. Utiliza la biblioteca `threading` para manejar la concurrencia y sincronización de los hilos.
+
+## Características
+
+- **print_even_numbers**: Función que imprime números pares del 1 al 200, esperando 0.5 segundos entre cada impresión.
+- **print_odd_numbers**: Función que imprime números impares del 1 al 200 mientras el hilo de números pares está activo.
+
+## Uso
+
+1. **Ejecutar el Script**: Simplemente ejecuta el script para ver la salida en la consola.
+
+   ```bash
+   python punto3a.py
+
+   ```
+
+2. **Salida**: El script imprimirá números pares e impares en la consola. Los números impares se imprimirán mientras el hilo de números pares esté activo. Ambos hilos se sincronizan de manera que el hilo de números impares espera hasta que el hilo de números pares haya terminado.
+
+# punto 3 b
+
+# Procesador de Datos JSON con Hilos
+
+Este script en Python lee un archivo JSON que contiene información de datos, valida y procesa los datos en paralelo utilizando hilos. Usa Pydantic para la validación de datos y `concurrent.futures.ThreadPoolExecutor` para gestionar múltiples hilos.
+
+## Características
+
+- **DataItem**: Modelo de datos definido con Pydantic para validar la estructura de los datos JSON.
+- **Validación de JSON**: Lee y valida el archivo JSON, asegurando que cumpla con el modelo `DataItem`.
+- **Procesamiento Multihilo**: Utiliza hilos para procesar los datos en paralelo, limitando el número de hilos activos a 4.
+- **Normalización de Datos**: Normaliza los datos de 0 a 1 y calcula estadísticas antes y después de la normalización.
+- **Registro de Actividades**: Registra información relevante y errores en un archivo de log y en la consola.
+
+## Uso
+
+1. **Instalación de Dependencias**: Asegúrate de tener instaladas las bibliotecas necesarias. Puedes instalarlas usando pip:
+
+   ```bash
+   pip install pydantic
+
+   ```
+
+2. **Ejecutar el Script**: Proporciona la ruta a un archivo JSON como argumento de línea de comandos al ejecutar el script.
+
+   ```bash
+   python punto3b.py ruta/al/archivo.json
+   ```
