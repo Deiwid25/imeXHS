@@ -1,33 +1,32 @@
 import logging
 import pydicom
-from pydantic import BaseModel , condecimal, conint, field_validator
+from pydantic import BaseModel, condecimal, conint, field_validator
 from typing import Optional
 import sys
 import re
 
-
+# Set up logging configuration
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 class PatientRecord(BaseModel):
   name: Optional[str] = None
-  age: Optional[conint(ge=0, le=120)] = None # type: ignore
+  age: Optional[conint(ge=0, le=120)] = None  # type: ignore
   birth_date: Optional[str] = None
   sex: Optional[str] = None
-  weight: Optional[condecimal(gt=0, decimal_places=2)] = None # type: ignore
+  weight: Optional[condecimal(gt=0, decimal_places=2)] = None  # type: ignore
   patient_id: Optional[str] = None
   patient_id_type: Optional[str] = None
 
-
-  # Validador personalizado para asegurar que birth_date tenga el formato correcto si se proporciona
+  # Custom validator to ensure birth_date has the correct format if provided
   @field_validator('birth_date')
   def validate_birth_date(cls, v):
     if v is not None:
-      # Puedes agregar validaciones más robustas aquí, como verificar si la fecha es válida
-      assert re.match(r'\d{4}-\d{2}-\d{2}', v), 'Fecha de nacimiento inválida'
+      # Add more robust validations here, such as checking if the date is valid
+      assert re.match(r'\d{4}-\d{2}-\d{2}', v), 'Invalid birth date'
     return v
 
-
   def get_patient_info(self):
+    """Return a dictionary of patient information."""
     return {
       "Name": self.name,
       "Age": self.age,
@@ -39,6 +38,7 @@ class PatientRecord(BaseModel):
     }
 
   def set_patient_info(self, name=None, age=None, birth_date=None, sex=None, weight=None, patient_id=None, patient_id_type=None):
+    """Set patient information attributes."""
     if name is not None:
       self.name = name
     if age is not None:
@@ -58,6 +58,7 @@ class Diagnosis(PatientRecord):
   diagnosis: Optional[str] = None
 
   def update_diagnosis(self, new_diagnosis: str):
+    """Update the diagnosis and log the change."""
     old_diagnosis = self.diagnosis
     self.diagnosis = new_diagnosis
     logging.info(f"Diagnosis updated from '{old_diagnosis}' to '{new_diagnosis}'")
@@ -71,6 +72,7 @@ class StudyRecord(PatientRecord):
   number_of_frames: Optional[int] = None
 
   def get_study_info(self):
+    """Return a dictionary of study information."""
     return {
       "Modality": self.modality,
       "Study Date": self.study_date,
@@ -81,6 +83,7 @@ class StudyRecord(PatientRecord):
     }
 
   def set_study_info(self, modality=None, study_date=None, study_time=None, study_instance_uid=None, series_number=None, number_of_frames=None):
+    """Set study information attributes."""
     if modality is not None:
       self.modality = modality
     if study_date is not None:
@@ -99,6 +102,7 @@ class DICOMStudyLoader(StudyRecord):
     super().__init__(**kwargs)
 
   def load_from_dicom(self, dicom_file_path: str):
+    """Load study details from a DICOM file."""
     try:
       dicom_file = pydicom.dcmread(dicom_file_path)
       self.name = dicom_file.PatientName if hasattr(dicom_file, 'PatientName') else None
@@ -115,6 +119,7 @@ class DICOMStudyLoader(StudyRecord):
       logging.error(f"Error loading DICOM file: {e}")
 
   def __str__(self):
+    """Return a string representation of the patient and study information."""
     patient_info = self.get_patient_info()
     study_info = self.get_study_info()
     combined_info = {**patient_info, **study_info}
@@ -122,18 +127,15 @@ class DICOMStudyLoader(StudyRecord):
     return info_str
 
 def main():
-
+  """Main function to load a DICOM file and print the information."""
   path = sys.argv[1]
-  # Crear una instancia de DICOMStudyLoader
+  # Create an instance of DICOMStudyLoader
   dicom_loader = DICOMStudyLoader()
   
-  # Cargar detalles del estudio desde un archivo DICOM
+  # Load study details from a DICOM file
   dicom_loader.load_from_dicom(path)
 
   print(dicom_loader)
-
-  #diagnostic
-
 
 if __name__ == '__main__':
   main()

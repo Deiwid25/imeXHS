@@ -35,3 +35,34 @@ si el archivo se encuentra en la misma ruta.
 ```sh
 python punto1.py 3 ./ sample-01-dicom.dcm 0x0008 0x0016
 ```
+
+# Punto2 Script
+
+# Cargador de Estudios DICOM
+
+Este script en Python demuestra cómo cargar y procesar información de estudios DICOM utilizando Pydantic para modelado y validación de datos. El script lee la información del paciente y del estudio desde un archivo DICOM y la imprime de manera formateada.
+
+## Características
+
+- **PatientRecord**: Modelo para almacenar información del paciente.
+- **Diagnosis**: Hereda de `PatientRecord` e incluye funcionalidades para actualizar y registrar diagnósticos.
+- **StudyRecord**: Hereda de `PatientRecord` e incluye campos específicos para registros de estudios.
+- **DICOMStudyLoader**: Hereda de `StudyRecord` y proporciona funcionalidad para cargar datos desde un archivo DICOM.
+
+## Uso
+
+1. **Configuración**: Asegúrate de tener `pydicom` y `pydantic` instalados. Puedes instalarlos usando pip:
+
+   ```bash
+   pip install pydicom pydantic
+
+   ```
+
+2. **Ejecutar el Script**: Proporciona la ruta a un archivo DICOM como argumento de línea de comandos al ejecutar el script.
+
+   ```bash
+   python script.py ruta/al/archivo_dicom.dcm
+
+   ```
+
+3. **Salida**: El script cargará el archivo DICOM, extraerá la información relevante y la imprimirá en la consola. La salida incluye la información del paciente y los detalles del estudio.
