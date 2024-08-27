@@ -1,9 +1,8 @@
 import os
 import sys
-import csv
 import pandas as pd
 import logging
-
+import pydicom
 
 logging.basicConfig(level=logging.ERROR, format='%(asctime)s - %(levelname)s - %(message)s')
 class FileOperations:
@@ -51,26 +50,61 @@ class FileOperations:
     except Exception as e:
       logging.error(f"Error reading CSV file: {e}")
 
-
+  @staticmethod
+  def read_dicom_file(path, filename, *tags):
+    """lee un archivo dicom """
+    try:
+      file_path = os.path.join(path,filename)
+      if os.path.exists(file_path):
+        if filename.endswith('.dcm'):
+          dicom_file = pydicom.dcmread(file_path)
+          print(f"Patient's Name: {dicom_file.PatientName}")
+          print(f"Study Date: {dicom_file.StudyDate}")
+          print(f"Modality: {dicom_file.Modality}")
+          for tag in tags:
+            try:
+              print(f"Tag {tag}: {dicom_file[tag].value}")
+            except KeyError:
+              logging.error(f"Tag {tag} not found in the DICOM file.")
+        else:
+          logging.error("notthe DICOM file.")
+      else:
+        logging.error("not found in the DICOM file.")
+    except Exception as e:
+      logging.error(f"Error reading CSV file: {e}")
 def main():
-  if len(sys.argv) <3:
-    print("Usage: python punto1.py <number[1-3]> <path> <filename>")
-  try:
-    fun = int(sys.argv[1])
-    path = sys.argv[2]
-    
-    if fun == 1:
-      FileOperations.list_folder_contents(path)
-    elif fun == 2:
-      filename = sys.argv[3]
-      
-      FileOperations.read_csv_file(path,filename)
-    elif fun == 3:
-      filename = sys.argv[3]
-    else:
-      raise Exception(f"The number is in 1 to 3.")
-  except Exception as e:
-    raise Exception(f"Error input folder: {e}")
+  print("Usage: python script_name.py <number[1-3]> <path> <filename> [<tag> ...]")
+  print("Options:")
+  print("  1: List the contents of a directory.")
+  print("  2: Read a CSV file and show column details and statistics.")
+  print("  3: Read a DICOM file and show metadata. Optionally, specify DICOM tags to display.")
+  print("Examples:")
+  print("  python punto1.py 1 /path/to/directory")
+  print("  python punto1.py 2 /path/to/directory data.csv")
+  print("  python punto1.py 3 /path/to/directory image.dcm (tag1 tag2 ...)")
+  if len(sys.argv) >2:
+    try:
+      fun = int(sys.argv[1])
+      path = sys.argv[2]
+      if fun == 1:
+        FileOperations.list_folder_contents(path)
+      elif fun == 2:
+        filename = sys.argv[3]
+        FileOperations.read_csv_file(path,filename)
+      elif fun == 3:
+        filename = sys.argv[3]
+        if len(sys.argv) <5:
+          FileOperations.read_dicom_file(path,filename)
+        else:
+          tags = sys.argv[4:]
+          FileOperations.read_dicom_file(path,filename,tags)
+      else:
+        raise ValueError("The number must be between 1 and 3.")
+    except Exception as e:
+      logging.error(f"Error processing input: {e}")
+  else:
+    print("Error: Missing arguments.")
+    print("Usage: python script_name.py <number[1-3]> <path> <filename> [<tag> ...]")
 
 
 if __name__ == '__main__':
