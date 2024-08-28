@@ -93,7 +93,7 @@ fi
 echo "Run pip"
 pip install -r requirements.txt
 # Run migrations and start the server
-echo Installing dependencies..."
+echo "Installing dependencies..."
 $DJANGO_MANAGE migrate
 
 echo "Starting Django development server..."
