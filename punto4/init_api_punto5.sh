@@ -29,6 +29,7 @@ function create_postgres_db() {
     $PSQL -c "DROP ROLE nombre_del_rol;"
   fi
 
+
   # Verificar si el usuario existe y eliminarlo si es necesario
   $PSQL -tAc "SELECT usename FROM pg_user WHERE usename='$DB_USER';" | grep -q "$DB_USER"
   if [[ $? -eq 0 ]]; then
