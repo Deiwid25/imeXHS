@@ -99,17 +99,27 @@ LOGGING = {
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+  'default': {
+    'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'medical_images_db',
+        'USER': 'django_user',
+        'PASSWORD': 'securepassword',
+        'HOST': 'localhost',
+        'PORT': '5432',
+  }
 }
 
 if os.getenv('USE_POSTGRES', 'False') == 'True':
   DATABASES = {
     'default': {
-      'ENGINE': 'django.db.backends.sqlite3',
+      'ENGINE': 'django.db.backends.postgresql',  # Cambiado a 'postgresql'
+        'NAME': 'medical_images_db',
+        'USER': 'django_user',
+        'PASSWORD': 'securepassword',
+        'HOST': 'localhost',
+        'PORT': '5432',
       'NAME': os.getenv('POSTGRES_DB', 'medical_images_db'),
       'USER': os.getenv('POSTGRES_USER', 'django_user'),
       'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'securepassword'),
