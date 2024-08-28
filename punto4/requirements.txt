@@ -3,7 +3,10 @@ asgiref==3.8.1
 Django==5.1
 django-cors-headers==4.4.0
 djangorestframework==3.15.2
+drf-yasg==1.21.7
+inflection==0.5.1
 numpy==2.1.0
+packaging==24.1
 pandas==2.2.2
 psycopg==3.2.1
 pydantic==2.8.2
@@ -11,7 +14,9 @@ pydantic_core==2.20.1
 pydicom==2.4.4
 python-dateutil==2.9.0.post0
 pytz==2024.1
+PyYAML==6.0.2
 six==1.16.0
 sqlparse==0.5.1
 typing_extensions==4.12.2
 tzdata==2024.1
+uritemplate==4.1.1
