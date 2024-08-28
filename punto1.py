@@ -73,6 +73,10 @@ class FileOperations:
     except Exception as e:
       logging.error(f"Error reading CSV file: {e}")
 def main():
+  print("")
+  print("")
+  print("")
+  print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
   print("Usage: python script_name.py <number[1-3]> <path> <filename> [<tag> ...]")
   print("Options:")
   print("  1: List the contents of a directory.")
@@ -82,6 +86,10 @@ def main():
   print("  python punto1.py 1 /path/to/directory")
   print("  python punto1.py 2 /path/to/directory data.csv")
   print("  python punto1.py 3 /path/to/directory image.dcm (tag1 tag2 ...)")
+  print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+  print("")
+  print("")
+  print("")
   if len(sys.argv) >2:
     try:
       fun = int(sys.argv[1])
