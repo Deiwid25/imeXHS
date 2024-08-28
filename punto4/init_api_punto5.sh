@@ -17,10 +17,17 @@ function check_postgres() {
 }
 
 # Function to create or drop (if exists) PostgreSQL database and user
-# Function to create or drop (if exists) PostgreSQL database and user
+# Function to create or drop (if exists) PostgreSQL database, user, and role
 function create_postgres_db() {
-  echo "Attempting to check for existing PostgreSQL database and user..."
+  echo "Attempting to check for existing PostgreSQL database, user, and role..."
   PSQL="psql -U postgres -h $DB_HOST -p $DB_PORT"
+
+  # Verificar si el rol existe y eliminarlo si es necesario
+  $PSQL -tAc "SELECT rolname FROM pg_roles WHERE rolname = 'nombre_del_rol';" | grep -q "nombre_del_rol"
+  if [[ $? -eq 0 ]]; then
+    echo "Role 'nombre_del_rol' already exists. Dropping it..."
+    $PSQL -c "DROP ROLE nombre_del_rol;"
+  fi
 
   # Verificar si el usuario existe y eliminarlo si es necesario
   $PSQL -tAc "SELECT usename FROM pg_user WHERE usename='$DB_USER';" | grep -q "$DB_USER"
@@ -36,10 +43,12 @@ function create_postgres_db() {
     $PSQL -c "DROP DATABASE $DB_NAME;"
   fi
 
-  # Crear el usuario y la base de datos
+  # Crear el rol, el usuario y la base de datos
+  $PSQL -c "CREATE ROLE nombre_del_rol;" &&
   $PSQL -c "CREATE USER $DB_USER WITH PASSWORD '$DB_PASS';" &&
+  $PSQL -c "ALTER ROLE $DB_USER SET ROLE nombre_del_rol;" &&
   $PSQL -c "CREATE DATABASE $DB_NAME OWNER $DB_USER;" &&
-  echo "PostgreSQL database and user created successfully." &&
+  echo "PostgreSQL database, user, and role created successfully." &&
   return 0
 
   echo "Failed to create PostgreSQL database."
