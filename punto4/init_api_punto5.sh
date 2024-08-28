@@ -18,14 +18,21 @@ function check_postgres() {
 
 # Function to create or drop (if exists) PostgreSQL database and user
 function create_postgres_db() {
-  echo "Attempting to check for existing PostgreSQL database..."
+  echo "Attempting to check for existing PostgreSQL database and user..."
   PSQL="psql -U postgres -h $DB_HOST -p $DB_PORT"
 
-  # Verificar si la base de datos existe
+  # Verificar si la base de datos existe y eliminarla si es necesario
   $PSQL -tAc "SELECT datname FROM pg_database WHERE datname='$DB_NAME';" | grep -q "$DB_NAME"
   if [[ $? -eq 0 ]]; then
     echo "Database '$DB_NAME' already exists. Dropping it..."
     $PSQL -c "DROP DATABASE $DB_NAME;"
+  fi
+
+  # Verificar si el usuario existe y eliminarlo si es necesario
+  $PSQL -tAc "SELECT usename FROM pg_user WHERE usename='$DB_USER';" | grep -q "$DB_USER"
+  if [[ $? -eq 0 ]]; then
+    echo "User '$DB_USER' already exists. Dropping it..."
+    $PSQL -c "DROP USER $DB_USER;"
   fi
 
   echo "Creating PostgreSQL database and user..."
