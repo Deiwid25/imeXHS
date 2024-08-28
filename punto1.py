@@ -140,7 +140,7 @@ def main():
           FileOperations.read_dicom_file(path, filename)
         else:
           tags = sys.argv[4:]
-          FileOperations.read_dicom_file(path, filename, *tags)
+          FileOperations.read_dicom_file(path, filename, tags)
       else:
         # Raise an error if the function number is not between 1 and 3
         raise ValueError("The number must be between 1 and 3.")
