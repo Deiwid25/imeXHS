@@ -1,10 +1,20 @@
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 from .models import Element
 from .serializers import ElementSerializer, ElementUpdateSerializer, ElementGetSerializer
 
 class ElementAPIView(APIView):
+
+  @swagger_auto_schema(
+    operation_description="Retrieve a specific entry by ID or list all entries.",
+    responses={
+      200: ElementGetSerializer(many=True),
+      404: 'Not found'
+    }
+  )
   def get(self, request, id=None):
     """Retrieve a specific entry by ID or list all entries."""
     if id:
@@ -19,6 +29,14 @@ class ElementAPIView(APIView):
       serializer = ElementSerializer(elements, many=True)
       return Response(serializer.data, status=status.HTTP_200_OK)
 
+  @swagger_auto_schema(
+    operation_description="Create a new entry.",
+    request_body=ElementSerializer,
+    responses={
+      201: ElementSerializer,
+      400: 'Bad Request'
+    }
+  )
   def post(self, request):
     """Create a new entry."""
     serializer = ElementSerializer(data=request.data)
@@ -27,8 +45,17 @@ class ElementAPIView(APIView):
       return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+  @swagger_auto_schema(
+    operation_description="Update an existing Element by ID.",
+    request_body=ElementUpdateSerializer,
+    responses={
+      200: ElementUpdateSerializer,
+      404: 'Element not found',
+      400: 'Bad Request'
+    }
+  )
   def patch(self, request, *args, **kwargs):
-    """Update an existing Element"""
+    """Update an existing Element by ID."""
     try:
       element = Element.objects.get(id=kwargs['id'])
     except Element.DoesNotExist:
@@ -39,6 +66,14 @@ class ElementAPIView(APIView):
       return Response(serializer.data, status=status.HTTP_200_OK)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+  @swagger_auto_schema(
+    operation_description="Delete an entry by ID.",
+    responses={
+      204: 'Deleted successfully.',
+      404: 'Not found',
+      400: 'ID is required for deletion.'
+    }
+  )
   def delete(self, request, id=None):
     """Delete an entry by ID."""
     if not id:
