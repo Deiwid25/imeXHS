@@ -74,4 +74,26 @@ function update_settings_sqlite() {
   sed -i "/'PORT': '$DB_PORT'/d" $SETTINGS_FILE
 }
 
-#
+# Main script
+if check_postgres; then
+  echo "PostgreSQL is available. Setting up database..."
+  if create_postgres_db; then
+    update_settings_postgres
+  else
+    echo "Switching to SQLite..."
+    update_settings_sqlite
+  fi
+else
+  echo "PostgreSQL is not available. Using SQLite database."
+  update_settings_sqlite
+fi
+
+#Install dependencies
+echo "Run pip"
+pip install -r requirements.txt
+# Run migrations and start the server
+echo "Installing dependencies..."
+$DJANGO_MANAGE migrate
+
+echo "Starting Django development server..."
+$DJANGO_MANAGE runserver
