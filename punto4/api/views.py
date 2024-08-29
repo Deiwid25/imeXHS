@@ -6,28 +6,19 @@ from drf_yasg import openapi
 from .models import Element
 from .serializers import ElementSerializer, ElementUpdateSerializer, ElementGetSerializer
 
-class ElementAPIView(APIView):
+class ElementListCreateAPIView(APIView):
 
   @swagger_auto_schema(
-    operation_description="Retrieve a specific entry by ID or list all entries.",
+    operation_description="Retrieve a list of all entries.",
     responses={
       200: ElementGetSerializer(many=True),
-      404: 'Not found'
     }
   )
-  def get(self, request, id=None):
-    """Retrieve a specific entry by ID or list all entries."""
-    if id:
-      try:
-        element = Element.objects.get(id=id)
-        serializer = ElementGetSerializer(element)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-      except Element.DoesNotExist:
-        return Response({'detail': 'Not found.'}, status=status.HTTP_404_NOT_FOUND)
-    else:
-      elements = Element.objects.all()
-      serializer = ElementSerializer(elements, many=True)
-      return Response(serializer.data, status=status.HTTP_200_OK)
+  def get(self, request):
+    """Retrieve a list of all entries."""
+    elements = Element.objects.all()
+    serializer = ElementGetSerializer(elements, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
   @swagger_auto_schema(
     operation_description="Create a new entry.",
@@ -44,6 +35,25 @@ class ElementAPIView(APIView):
       serializer.save()
       return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+  
+
+class ElementDetailAPIView(APIView):
+
+  @swagger_auto_schema(
+    operation_description="Retrieve a specific entry by ID.",
+    responses={
+      200: ElementGetSerializer,
+      404: 'Not found'
+    }
+  )
+  def get(self, request, id=None):
+    """Retrieve a specific entry by ID."""
+    try:
+      element = Element.objects.get(id=id)
+      serializer = ElementGetSerializer(element)
+      return Response(serializer.data, status=status.HTTP_200_OK)
+    except Element.DoesNotExist:
+      return Response({'detail': 'Not found.'}, status=status.HTTP_404_NOT_FOUND)
 
   @swagger_auto_schema(
     operation_description="Update an existing Element by ID.",
@@ -54,12 +64,13 @@ class ElementAPIView(APIView):
       400: 'Bad Request'
     }
   )
-  def patch(self, request, *args, **kwargs):
+  def patch(self, request, id=None):
     """Update an existing Element by ID."""
     try:
-      element = Element.objects.get(id=kwargs['id'])
+      element = Element.objects.get(id=id)
     except Element.DoesNotExist:
       return Response({'error': 'Element not found'}, status=status.HTTP_404_NOT_FOUND)
+
     serializer = ElementUpdateSerializer(element, data=request.data, partial=True)
     if serializer.is_valid():
       serializer.save()
@@ -76,9 +87,6 @@ class ElementAPIView(APIView):
   )
   def delete(self, request, id=None):
     """Delete an entry by ID."""
-    if not id:
-      return Response({'detail': 'ID is required for deletion.'}, status=status.HTTP_400_BAD_REQUEST)
-
     try:
       element = Element.objects.get(id=id)
     except Element.DoesNotExist:
