@@ -155,43 +155,6 @@ Una vez creada, la próxima vez que necesites iniciar la aplicación, simplement
  python manage.py runserver
 ```
 
-# Editor Markdown
-
-Editor Markdown es un editor online que se ejecuta en tu navegador y que funciona tanto con tus archivos locales como con varios servicios de almacenamiento cloud.
-
-## Punto 5 Sistema de Procesamiento Distribuido de DICOM (Diseño y Arquitectura)
-
-Se te ha asignado la tarea de diseñar un sistema distribuido que procese grandes lotes de imágenes médicas (por ejemplo, imágenes DICOM) en múltiples máquinas. Tu diseño debe asegurar una distribución eficiente de tareas, tolerancia a fallos, registro de actividades y escalabilidad. El sistema debe manejar múltiples cargas simultáneas de imágenes, realizar procesamiento distribuido y proporcionar una forma para que los usuarios recuperen los resultados. Esta pregunta se centra en la arquitectura y el diseño, más que en la implementación.
-
-1. **Punto de entrada principal**:
-   Diseña el punto de entrada principal donde los usuarios suben imágenes médicas (archivos DICOM).
-   Este punto de entrada debe aceptar archivos grandes, validarlos y ponerlos en cola para su procesamiento.
-
-2. **Sistema de procesamiento distribuido**:
-   Diseña un grupo de servidores (trabajadores) responsables de procesar las imágenes médicas subidas.
-   Considera el balanceo de carga y la distribución de tareas entre los servidores según la carga de trabajo y los límites de uso (por ejemplo, CPU, memoria).
-   Asegura la escalabilidad, permitiendo la adición o eliminación de servidores según las demandas del sistema.
-
-3. **Límites de uso y gestión de recursos**:
-   Explica cómo el sistema monitoreará y gestionará el uso de cada servidor para evitar la sobrecarga.
-   Propón un algoritmo o estrategia para asignar tareas eficientemente a los servidores según su carga actual y capacidades.
-
-4. **Integración de base de datos**:
-   Cada servidor de procesamiento debe almacenar los resultados de su análisis de imágenes médicas en una base de datos distribuida. Diseña cómo los servidores informarán sus resultados a la base de datos correspondiente.
-   Asegura que la base de datos pueda manejar grandes volúmenes de datos y escrituras concurrentes desde múltiples servidores.
-   Incluye un mecanismo para registrar todas las actividades de procesamiento, incluidas fallas y éxitos, para rastrear el rendimiento del sistema.
-
-5. **Sistema de información para usuarios**:
-   Los usuarios deben poder iniciar sesión en un sistema de información (por ejemplo, un portal web) para verificar el estado de sus imágenes enviadas y recuperar los resultados.
-   Diseña cómo el sistema de información interactuará con la base de datos distribuida para mostrar a los usuarios sus datos procesados en tiempo real.
-   Incluye consideraciones de diseño para la autenticación de usuarios, control de acceso y la interfaz de usuario (UI/UX) para mostrar los resultados del procesamiento.
-
-6. **Consideraciones adicionales**:
-   ¿Cómo asegurará el sistema la seguridad y privacidad de los datos médicos, especialmente considerando el cumplimiento con HIPAA o GDPR?
-   ¿Qué métodos de encriptación utilizarías para la transmisión y el almacenamiento de datos?
-   Describe cómo se implementará el registro de actividades en todo el sistema para monitorear la salud y el estado de cada componente (por ejemplo, cola de tareas, servidores de trabajo, base de datos).
-   ¿Cómo manejará el sistema los errores o la inactividad de servidores individuales manteniendo la disponibilidad general?
-
 # Punto 5
 
 # Sistema Distribuido de Almacenamiento y Procesamiento de Imágenes Médicas
