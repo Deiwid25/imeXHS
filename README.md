@@ -392,10 +392,4 @@ Para mantener la disponibilidad general del sistema ante errores o inactividad d
    - Configuración de Horizontal Pod Autoscaler en Kubernetes para escalar servicios basados en la carga.
    - Implementación de políticas de escalado para Dask workers basadas en la cola de tareas.
 
-## 6. Conclusión
-
-Esta arquitectura proporciona una solución robusta, segura y escalable para el almacenamiento y procesamiento de imágenes médicas. La implementación por fases permite un desarrollo controlado y la validación de cada componente. Con las tecnologías seleccionadas y las consideraciones de seguridad y rendimiento, el sistema está bien posicionado para manejar los desafíos del procesamiento de imágenes médicas a gran escala, cumpliendo con los estrictos requisitos de seguridad y privacidad del sector sanitario.
-
-La flexibilidad de la arquitectura permite futuras expansiones y adaptaciones a medida que evolucionan las necesidades y tecnologías en el campo de la imagen médica. El enfoque en la seguridad, el cumplimiento normativo y la alta disponibilidad asegura que el sistema pueda operar de manera confiable en entornos críticos de atención médica.
-
 ![Diagrama de Arquitectura](arquitectura_propuesta.png)
